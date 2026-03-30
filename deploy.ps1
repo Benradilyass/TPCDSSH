@@ -13,4 +13,10 @@ docker rm flask_app -ErrorAction SilentlyContinue
 docker pull $DockerUser/flask_devops_demo:latest
 
 # Lancer le conteneur Flask
-docker run -d --name flask_app -p 5000:5000 $DockerUser/flask_devops_demo:latest
+$container = docker run -d --name flask_app -p 5000:5000 $DockerUser/flask_devops_demo:latest
+if (-not $container) {
+    Write-Error "Container failed to start!"
+    exit 1
+} else {
+    Write-Host "Container started successfully: $container"
+}
