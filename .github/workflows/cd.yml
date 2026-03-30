@@ -33,4 +33,4 @@ jobs:
         run: |
           echo "${{ secrets.SSH_KEY }}" | tr -d '\r' > key.pem
           chmod 600 key.pem
-          ssh -i key.pem -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}"@"${{ secrets.SSH_HOST }}" "powershell -ExecutionPolicy Bypass -File 'C:\\tests\\TPCDSSH\\deploy.ps1' -DockerUser '${{ secrets.DOCKER_USERNAME }}' -DockerToken '${{ secrets.DOCKER_TOKEN }}'"
+          ssh -i key.pem -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command \"& 'C:\\tests\\TPCDSSH\\deploy.ps1' -DockerUser '${{ secrets.DOCKER_USERNAME }}' -DockerToken '${{ secrets.DOCKER_TOKEN }}'\""
