@@ -2,21 +2,16 @@ param (
     [string]$DockerUser,
     [string]$DockerToken
 )
-# Connexion Docker Hub
-docker login -u $DockerUser -p $DockerToken
 
-# Arrêter et supprimer ancien conteneur
-docker stop flask_app -ErrorAction SilentlyContinue
-docker rm flask_app -ErrorAction SilentlyContinue
+# Login to Docker without using Windows credentials
+$DockerToken | docker login -u $DockerUser --password-stdin
 
-# Pull dernière image Docker
+# Stop and remove old container
+docker stop flask_app 2>$null
+docker rm flask_app 2>$null
+
+# Pull latest image
 docker pull $DockerUser/flask_devops_demo:latest
 
-# Lancer le conteneur Flask
-$container = docker run -d --name flask_app -p 5000:5000 $DockerUser/flask_devops_demo:latest
-if (-not $container) {
-    Write-Error "Container failed to start!"
-    exit 1
-} else {
-    Write-Host "Container started successfully: $container"
-}
+# Run container
+docker run -d --name flask_app -p 5000:5000 $DockerUser/flask_devops_demo:latest
